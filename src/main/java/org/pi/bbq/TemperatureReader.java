@@ -25,6 +25,8 @@ public class TemperatureReader {
 
 	private static List<String> faults = new ArrayList<String>();
 
+	//Run once a minute.
+	@Scheduled(fixedDelay = 60000)
 	public void readTemperatures() {
 
 		// https://projects.drogon.net/understanding-spi-on-the-raspberry-pi/
