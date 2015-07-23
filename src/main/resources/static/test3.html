@@ -1,0 +1,46 @@
+<html>
+<head>
+<!--Load the AJAX API -->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+//Load the visualization API and the piechart package
+google.load('visualization','1',{'packages':['corechart']});
+
+
+function drawChart(){
+  var jsonData = $.ajax({
+        url:"temperatures.json?num_sens=0",
+        dataType:"json",
+        async:false
+        }).responseText;
+
+//Create our data table out of JSON data loaded from server
+jsonData = JSON.stringify(eval("(" + jsonData + ")"));
+var data=new google.visualization.DataTable(jsonData);
+
+//ColumnChart
+var table = new google.visualization.LineChart(document.getElementById('chart_div'));
+var options = {
+        hAxis: {
+          title: 'Name'
+        },
+        vAxis: {
+          title: 'Population'
+        }
+      };
+table.draw(data, options);
+}
+
+//Set a callback to run when the google visualization API is loaded
+google.setOnLoadCallback(drawChart);
+</script>
+</head>
+
+<body>
+        <!--Div that will hold the pie chart -->
+        <div id="chart_div"></div>
+</body>
+</html>
