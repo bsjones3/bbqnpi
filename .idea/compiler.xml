@@ -23,10 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="bbq" />
+        <module name="bbqpi" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="bbq" target="1.8" />
+      <module name="bbqpi" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
