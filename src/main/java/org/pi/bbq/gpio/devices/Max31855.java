@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Max31855 {
 	
-	public String readValues() {
+	public String logTemperatures() {
 		
 		String result = "";
 		try {

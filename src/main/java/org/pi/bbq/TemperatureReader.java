@@ -29,10 +29,10 @@ public class TemperatureReader {
 	private static List<String> faults = new ArrayList<String>();
 
 	//Run once a minute.
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(fixedDelay = 15000)
 	public void readTemperatures() {
 
-//		max31855.readValues();
+		max31855.logTemperatures();
 //
 //		int[] raw = new int[2];
 //		int faults = max31855.readRaw(raw);
@@ -71,7 +71,7 @@ public class TemperatureReader {
 //		System.err.println(text);
 //	}
 
-	@Scheduled(fixedDelay = 25000)
+//	@Scheduled(fixedDelay = 25000)
 	public void runDataLoader() {
 		int lowerBound = 225;
 		int upperBound = 250;
