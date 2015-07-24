@@ -6,7 +6,7 @@ package org.pi.bbq.gpio.devices;
 
 import com.pi4j.io.gpio.*;
 
-public class provisionPins
+public class ProvisionPins
 {
 
 	public static void main(String[] args) throws InterruptedException
