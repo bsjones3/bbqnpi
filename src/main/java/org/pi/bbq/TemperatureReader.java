@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.pi.bbq.gpio.devices.Max31855;
+import org.pi.bbq.gpio.devices.ProvisionPins;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,40 +24,21 @@ public class TemperatureReader {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	@Autowired
+	ProvisionPins provisionPins;
+
 	private static List<String> faults = new ArrayList<String>();
 
 	//Run once a minute.
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(fixedDelay = 10000)
 	public void readTemperatures() {
 
-		// https://projects.drogon.net/understanding-spi-on-the-raspberry-pi/
-		// http://developer-blog.net/wp-content/uploads/2013/09/raspberry-pi-rev2-gpio-pinout.jpg
-		// http://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus
-
-		int channel = Spi.CHANNEL_0;
-		int fd = Spi.wiringPiSPISetup(channel, 500000); // 500 kHz
-		if (fd == -1) {
-			throw new RuntimeException("SPI setup failed.");
-		}
-
-		// http://pi4j.com/example/control.html
-		Max31855 max31855 = new Max31855(channel);
-
-		int[] raw = new int[2];
-		int faults = max31855.readRaw(raw);
-
-		float internal = max31855.getInternalTemperature(raw[0]);
-		float thermocouple = max31855.getThermocoupleTemperature(raw[1]);
-
-		System.out.println("Internal = " + internal + " C, Thermocouple = "
-				+ thermocouple + " C");
-		if (faults != 0) {
-			onFaults(faults);
+		provisionPins.getTemperature();
 			
-		jdbcTemplate.execute("INSERT INTO temps (sensnum,temp) values(0, "
-					+ thermocouple + ")");
-		}
+		//jdbcTemplate.execute("INSERT INTO temps (sensnum,temp) values(0, "
+		//			+ thermocouple + ")");
 	}
+
 
 	private static void onFaults(int f) {
 		faults.clear();
@@ -79,7 +61,7 @@ public class TemperatureReader {
 		System.err.println(text);
 	}
 
-	@Scheduled(fixedDelay = 25000)
+	//@Scheduled(fixedDelay = 25000)
 	public void runDataLoader() {
 		int lowerBound = 225;
 		int upperBound = 250;

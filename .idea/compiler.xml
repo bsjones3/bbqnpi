@@ -26,9 +26,8 @@
         <module name="bbqpi" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8">
       <module name="bbq" target="1.8" />
-      <module name="bbqpi" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
