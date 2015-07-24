@@ -7,7 +7,7 @@ public class Temperature {
 
 	private Timestamp time;
 	private int sensnum;
-	private int temp;
+	private float temp;
 	
 	public Temperature(Timestamp timestamp, int int1, int int2) 
 	{
@@ -42,7 +42,7 @@ public class Temperature {
 	/**
 	 * @return the temp
 	 */
-	public int getTemp() {
+	public float getTemp() {
 		return temp;
 	}
 	/**

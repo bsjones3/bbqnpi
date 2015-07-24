@@ -22,6 +22,9 @@ public class TemperatureReader {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	Max31855 max31855;
 
 	private static List<String> faults = new ArrayList<String>();
 
@@ -29,55 +32,44 @@ public class TemperatureReader {
 	@Scheduled(fixedDelay = 60000)
 	public void readTemperatures() {
 
-		// https://projects.drogon.net/understanding-spi-on-the-raspberry-pi/
-		// http://developer-blog.net/wp-content/uploads/2013/09/raspberry-pi-rev2-gpio-pinout.jpg
-		// http://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus
-
-		int channel = Spi.CHANNEL_0;
-		int fd = Spi.wiringPiSPISetup(channel, 500000); // 500 kHz
-		if (fd == -1) {
-			throw new RuntimeException("SPI setup failed.");
-		}
-
-		// http://pi4j.com/example/control.html
-		Max31855 max31855 = new Max31855(channel);
-
-		int[] raw = new int[2];
-		int faults = max31855.readRaw(raw);
-
-		float internal = max31855.getInternalTemperature(raw[0]);
-		float thermocouple = max31855.getThermocoupleTemperature(raw[1]);
-
-		System.out.println("Internal = " + internal + " C, Thermocouple = "
-				+ thermocouple + " C");
-		if (faults != 0) {
-			onFaults(faults);
-			
-		jdbcTemplate.execute("INSERT INTO temps (sensnum,temp) values(0, "
-					+ thermocouple + ")");
-		}
+//		max31855.readValues();
+//
+//		int[] raw = new int[2];
+//		int faults = max31855.readRaw(raw);
+//
+//		float internal = max31855.getInternalTemperature(raw[0]);
+//		float thermocouple = max31855.getThermocoupleTemperature(raw[1]);
+//
+//		System.out.println("Internal = " + internal + " C, Thermocouple = "
+//				+ thermocouple + " C");
+//		if (faults != 0) {
+//			onFaults(faults);
+//			
+//		jdbcTemplate.execute("INSERT INTO temps (sensnum,temp) values(0, "
+//					+ thermocouple + ")");
+//		}
 	}
 
-	private static void onFaults(int f) {
-		faults.clear();
-
-		if ((f & Max31855.FAULT_OPEN_CIRCUIT_BIT) == Max31855.FAULT_OPEN_CIRCUIT_BIT)
-			faults.add("Open Circuit");
-		if ((f & Max31855.FAULT_SHORT_TO_GND_BIT) == Max31855.FAULT_SHORT_TO_GND_BIT)
-			faults.add("Short To GND");
-		if ((f & Max31855.FAULT_SHORT_TO_VCC_BIT) == Max31855.FAULT_SHORT_TO_VCC_BIT)
-			faults.add("Short To VCC");
-
-		boolean first = true;
-		String text = "Faults = ";
-		for (String fault : faults) {
-			if (!first)
-				text += ", ";
-			text += fault;
-		}
-
-		System.err.println(text);
-	}
+//	private static void onFaults(int f) {
+//		faults.clear();
+//
+//		if ((f & Max31855.FAULT_OPEN_CIRCUIT_BIT) == Max31855.FAULT_OPEN_CIRCUIT_BIT)
+//			faults.add("Open Circuit");
+//		if ((f & Max31855.FAULT_SHORT_TO_GND_BIT) == Max31855.FAULT_SHORT_TO_GND_BIT)
+//			faults.add("Short To GND");
+//		if ((f & Max31855.FAULT_SHORT_TO_VCC_BIT) == Max31855.FAULT_SHORT_TO_VCC_BIT)
+//			faults.add("Short To VCC");
+//
+//		boolean first = true;
+//		String text = "Faults = ";
+//		for (String fault : faults) {
+//			if (!first)
+//				text += ", ";
+//			text += fault;
+//		}
+//
+//		System.err.println(text);
+//	}
 
 	@Scheduled(fixedDelay = 25000)
 	public void runDataLoader() {
