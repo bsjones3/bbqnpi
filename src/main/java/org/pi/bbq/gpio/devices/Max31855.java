@@ -10,7 +10,7 @@ public class Max31855 {
 	
 	
 	public String logTemperatures() {
-		
+		System.out.println("Start reading...");
 		String result = "";
 		try {
 /// TODO Change to use the Python script to read temperature values.			
