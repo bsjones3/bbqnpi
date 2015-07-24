@@ -29,10 +29,18 @@ public class TemperatureReader {
 	private static List<String> faults = new ArrayList<String>();
 
 	//Run once a minute.
+<<<<<<< HEAD
 	@Scheduled(fixedDelay = 15000)
+=======
+	@Scheduled(fixedDelay = 60000)
+>>>>>>> branch 'master' of https://github.com/jaywagner/bbqpi.git
 	public void readTemperatures() {
 
+<<<<<<< HEAD
 		max31855.logTemperatures();
+=======
+//		max31855.readValues();
+>>>>>>> branch 'master' of https://github.com/jaywagner/bbqpi.git
 //
 //		int[] raw = new int[2];
 //		int faults = max31855.readRaw(raw);
@@ -71,7 +79,11 @@ public class TemperatureReader {
 //		System.err.println(text);
 //	}
 
+<<<<<<< HEAD
 //	@Scheduled(fixedDelay = 25000)
+=======
+	@Scheduled(fixedDelay = 25000)
+>>>>>>> branch 'master' of https://github.com/jaywagner/bbqpi.git
 	public void runDataLoader() {
 		int lowerBound = 225;
 		int upperBound = 250;
