@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.pi.bbq.gpio.devices.Max31855;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,9 @@ public class TemperatureReader {
 	
 	@Autowired
 	Max31855 max31855;
+	
+	@Value("${python.exec.temperature}")
+	private String pythonExec;
 
 	private static List<String> faults = new ArrayList<String>();
 
@@ -32,7 +36,7 @@ public class TemperatureReader {
 	@Scheduled(fixedDelay = 15000)
 	public void readTemperatures() {
 
-		max31855.logTemperatures();
+		max31855.logTemperatures(pythonExec);
 
 //
 //		int[] raw = new int[2];
