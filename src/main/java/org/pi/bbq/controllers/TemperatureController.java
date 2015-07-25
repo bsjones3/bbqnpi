@@ -57,7 +57,7 @@ public class TemperatureController {
 		List<Temperature> temperatures = new ArrayList<Temperature>();
 
 		jdbcTemplate
-				.query("SELECT (MAX(time)*1000) as time, sensnum, temp from temps where sensnum = ?",
+				.query("SELECT (MAX(time)*1000) as time, sensnum, temp from temperatures where sensnum = ?",
 						new Object[] { sensnum },
 						// "SELECT time, sensnum, temp FROM temps where sensnum = ? and time = (Select max(time) from temps where time <= CURRENT_TIMESTAMP and sensnum = ?)",
 						// new Object[] { sensnum, sensnum },
@@ -96,7 +96,7 @@ public class TemperatureController {
 			 */
 
 			jdbcTemplate
-					.query("SELECT times, sensnum, temp from (SELECT time*1000 as times, sensnum, temp FROM temps where sensnum = ? and time >= strftime('%s', 'now') - 3600 ORDER BY times DESC) ORDER BY times ASC",
+					.query("SELECT times, sensnum, temp from (SELECT time*1000 as times, sensnum, temp FROM temperatures where sensnum = ? and time >= strftime('%s', 'now') - 3600 ORDER BY times DESC) ORDER BY times ASC",
 							new Object[] { sensnum },
 							(rs, rowNum) -> new Temperature(rs
 									.getTimestamp("times"), rs

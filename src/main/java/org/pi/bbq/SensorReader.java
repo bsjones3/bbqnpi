@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.pi.bbq.gpio.devices.Max31855;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,24 +18,27 @@ import com.pi4j.io.gpio.RaspiPin;
 
 
 @Component
-public class TemperatureReader {
+public class SensorReader {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 	
-	@Autowired
-	Max31855 max31855;
-	
 	@Value("${python.exec.temperature}")
 	private String pythonExec;
 
-	private static List<String> faults = new ArrayList<String>();
-
 	//Run once every 15 seconds.
 	@Scheduled(fixedDelay = 15000)
-	public void readTemperatures() {
-
-		max31855.logTemperatures(pythonExec);
+	public void readSensors() {
+		
+		System.out.println("Start reading...");
+		try {
+			Runtime.getRuntime().exec(
+					String.format("sudo python " + pythonExec));
+		} catch (Exception e) {
+			System.err.println(String.format("Could not read the sensors"));
+			e.printStackTrace();
+		}
+		System.out.println("End reading...");
 
 //
 //		int[] raw = new int[2];
