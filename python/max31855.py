@@ -39,16 +39,16 @@ class MAX31855(object):
         '''Reads SPI bus and returns current value of thermocouple.'''
         self.read()
         check = self.checkErrors()
-	if check == -1:
-	    return check
-	elif check == -2:
-	    return check
-	elif check == -3:
-	    return check
-	elif check == -4:
-	    return check
-    else:
-	    return getattr(self, "to_" + self.units)(self.data_to_tc_temperature())
+        if (check == -1):
+            return check
+        elif check == -2:
+            return check
+        elif check == -3:
+            return check
+        elif check == -4:
+            return check
+        else:
+            return getattr(self, "to_" + self.units)(self.data_to_tc_temperature())
 
     def get_rj(self):
         '''Reads SPI bus and returns current value of reference junction.'''

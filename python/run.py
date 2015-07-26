@@ -22,22 +22,30 @@ def log_errors(sensnum,temp):
     conn.close()
 
 #Sensor 1:[0], Sensor 2:[1]
-#GPIO.BOARD means use the pin numbers on the pi board!!!
+#GPIO.BOARD means use the pin numbers on the pi board (NOT the GPIO Numbers)!!!
 cs_pins=[16,38]
 clock_pins=[22,36]
 data_pins=[18,40]
+t=[]
 units = "f"
 
-t1 = MAX31855(cs_pins[0], clock_pins[0], data_pins[0], units, GPIO.BOARD)
-t2 = MAX31855(cs_pins[1], clock_pins[1], data_pins[1], units, GPIO.BOARD)
+for x in range(0,2):
+    t.append(MAX31855(cs_pins[x], clock_pins[x], data_pins[x], units, GPIO.BOARD))
 
-if (t1.get() or t2.get()) == -1
+for i in range(0,2):
+    if t[i].get() == -1:
+        log_errors(i+1,"No Connection")
+    elif t[i].get() == -2:
+        log_errors(i+1,"Thermocouple short to ground")
+    elif t[i].get() == -3:
+        log_errors(i+1,"Thermocouple short to VCC")
+    elif t[i].get() == -4:
+        log_errors(i+1,"Unknown Error")
+    else:
+        log_temperature(i+1,t[i].get())
 
-log_temperature(1,t1.get())
-log_temperature(2,t2.get())
-
-t1.cleanup()
-t2.cleanup()
+t[0].cleanup()
+t[1].cleanup()
 
 #if fan.currentState() == False
 #    if thermocouple1.get() < 200
