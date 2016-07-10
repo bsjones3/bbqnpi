@@ -19,7 +19,7 @@ public class SensorReader {
 	private String pythonExec;
 
 	//Run once every 15 seconds.
-	@Scheduled(fixedDelay = 15000)
+//	@Scheduled(fixedDelay = 15000)
 	public void readSensors() {
 		
 		System.out.println("Start reading...");
